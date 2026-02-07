@@ -7,6 +7,7 @@ You can delete any number of characters in s to make s balanced. s is balanced i
 Return the minimum number of deletions needed to make s balanced.
 
 Program :
+1) Approach 01 Stack
 import java.util.Stack;
 
 class Solution {
@@ -31,3 +32,71 @@ class Solution {
         return count;
     }
 }
+
+2) Approach 02 
+class Solution {
+    public int minimumDeletions(String s) {
+        int n = s.length();
+
+        int[] left_b = new int[n];   // number of 'b' to the left
+        int[] right_a = new int[n];  // number of 'a' to the right
+
+        // Count 'b' on the left
+        int countb = 0;
+        for (int i = 0; i < n; i++) {
+            left_b[i] = countb;
+            if (s.charAt(i) == 'b') {
+                countb++;
+            }
+        }
+
+        // Count 'a' on the right
+        int counta = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            right_a[i] = counta;
+            if (s.charAt(i) == 'a') {
+                counta++;
+            }
+        }
+
+        // Find minimum deletions
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            ans = Math.min(ans, left_b[i] + right_a[i]);
+        }
+
+        return ans;
+    }
+}
+
+2) Approach 03 
+class Solution {
+    public int minimumDeletions(String s) {
+        int n = s.length();
+
+        int[] right_a = new int[n];
+
+        // Count 'a' on the right
+        int counta = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            right_a[i] = counta;
+            if (s.charAt(i) == 'a') {
+                counta++;
+            }
+        }
+
+        int ans = Integer.MAX_VALUE;
+        int countb = 0;
+
+        // Try every split point
+        for (int i = 0; i < n; i++) {
+            ans = Math.min(ans, countb + right_a[i]);
+            if (s.charAt(i) == 'b') {
+                countb++;
+            }
+        }
+
+        return ans;
+    }
+}
+
